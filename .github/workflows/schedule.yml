@@ -1,10 +1,23 @@
-name: Test Workflow
+name: Daily News Automation
+
 on:
-  push:
-      branches: [main]
+  schedule:
+      - cron: '40 4 * * *'
         workflow_dispatch:
+
         jobs:
-          test:
+          post:
               runs-on: ubuntu-latest
                   steps:
-                        - run: echo "Testing workflow"
+                        - uses: actions/checkout@v3
+
+                                    - uses: actions/setup-python@v4
+                                            with:
+                                                      python-version: '3.11'
+
+                                                                  - run: pip install -r requirements.txt
+
+                                                                              - run: python main.py
+                                                                                      env:
+                                                                                                TENREELS_USERNAME: ${{ secrets.TENREELS_USERNAME }}
+                                                                                                          TENREELS_PASSWORD: ${{ secrets.TENREELS_PASSWORD }}

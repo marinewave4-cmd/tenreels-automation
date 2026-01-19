@@ -220,7 +220,7 @@ def post_to_tenreels(driver, category, title, content, youtube_url):
             submit_selectors = [
                 "//button[@type='submit']",
                 "//input[@type='submit']",
-                "//button[contains(text(), '작성')]",
+                "//button[contains(text(), '작성완료')]",
             ]
             for selector in submit_selectors:
                 try:

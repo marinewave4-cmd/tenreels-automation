@@ -216,24 +216,30 @@ def post_to_tenreels(driver, category, title, content, youtube_url):
         except Exception as e:
             print(f"본문 입력 중 오류: {e}")
         time.sleep(2)
+        # Scroll down to make submit button visible
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(1)
+        
+        # Try to find and click submit button
         try:
-            submit_selectors = [
-                "//button[@type='submit']",
-                "//input[@type='submit']",
-                "//button[contains(text(), '작성완료')]",
-            ]
-            for selector in submit_selectors:
-                try:
-                    submit_btn = driver.find_element(By.XPATH, selector)
-                    if submit_btn.is_displayed():
-                        submit_btn.click()
-                        print("✓ 포스팅 완료!")
-                        time.sleep(3)
-                        return True
-                except Exception:
-                    continue
+            submit_btn = driver.find_element(By.XPATH, "//button[contains(text(), '작성완료')]")
+            driver.execute_script("arguments[0].scrollIntoView(true);", submit_btn)
+            time.sleep(0.5)
+            driver.execute_script("arguments[0].click();", submit_btn)
+            print("✓ 포스팅 완료!")
+            time.sleep(3)
+            return True
         except Exception as e:
-            print(f"포스팅 제출 중 오류: {e}")
+            print(f"작성완료 버튼 클릭 실패: {e}")
+            # Try form submit as fallback
+            try:
+                form = driver.find_element(By.TAG_NAME, "form")
+                form.submit()
+                print("✓ 폼 제출 완료!")
+                time.sleep(3)
+                return True
+            except Exception as e2:
+                print(f"폼 제출도 실패: {e2}")
         return True
     except Exception as e:
         print(f"포스팅 중 오류: {e}")

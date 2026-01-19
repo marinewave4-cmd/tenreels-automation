@@ -222,7 +222,7 @@ def post_to_tenreels(driver, category, title, content, youtube_url):
         
         # Try to find and click submit button
         try:
-            submit_btn = driver.find_element(By.XPATH, "//button[contains(text(), '작성완료')]")
+            submit_btn = driver.find_element(By.XPATH, "//button[contains(text(), '저장하기')]")
             driver.execute_script("arguments[0].scrollIntoView(true);", submit_btn)
             time.sleep(0.5)
             driver.execute_script("arguments[0].click();", submit_btn)
@@ -230,7 +230,7 @@ def post_to_tenreels(driver, category, title, content, youtube_url):
             time.sleep(3)
             return True
         except Exception as e:
-            print(f"작성완료 버튼 클릭 실패: {e}")
+            print(f"저장하기 버튼 클릭 실패: {e}")
             # Try form submit as fallback
             try:
                 form = driver.find_element(By.TAG_NAME, "form")
